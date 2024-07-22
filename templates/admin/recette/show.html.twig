@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Affichage
+{% endblock %}
+{% block body %}
+<main>
+<h1>L'ingredient</h1>
+<table class='table tble-striped'>
+<tr>
+		<th>Nom</th>
+		<th>Prix</th>
+        <tr>
+        <td>{{ingredient.name}}</td>
+        <td>{{ingredient.price}}</td>
+        </tr>
+</table>
+</main>
+{% endblock %}
