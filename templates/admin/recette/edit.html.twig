@@ -1,1 +1,13 @@
 {% extends 'base.html.twig' %}
+{% block title %}Modification
+{% endblock %}
+{% block body %}
+	<main>
+		<h1> Modification d'ingrédient</h1>
+        {{form_start(formulaire_recette)}}
+        {{form_rest(formulaire_recette)}}
+        <input type="submit" value='envoyer'>
+        {{form_end(formulaire_recette)}}
+
+	</main>
+{% endblock %}

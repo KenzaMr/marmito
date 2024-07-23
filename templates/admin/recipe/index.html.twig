@@ -1,0 +1,38 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Hello DescriptionController!
+{% endblock %}
+
+{% block body %}
+	<main>
+		<h1>Recette</h1>
+		<table class='table tble-striped'>
+			<tr>
+				<th>Nom</th>
+				<th>Slug</th>
+				<th>Temps</th>
+				<th>Nombre_de_personnes</th>
+				<th>Difficulté</th>
+				<th>Etape</th>
+				<th>Prix</th>
+				<th>Favoris</th>
+				<th>Date de création</th>
+				<th>Date de Modification</th>
+			</tr>
+			{% for formulaire in formulaire_description %}
+				<tr>
+					<td>{{formulaire.name}}</td>
+					<td>{{formulaire.slug}}</td>
+					<td>{{formulaire.time}}</td>
+					<td>{{formulaire.nbpersonne}}</td>
+					<td>{{formulaire.difficulties}}</td>
+					<td>{{formulaire.text}}</td>
+					<td>{{formulaire.prix}}</td>
+					<td>{{formulaire.favoris}}</td>
+					<td>{{formulaire.dateOfcreation|date('m/d/y')}}</td>
+					<td>{{formulaire.dateOfmaj|date('m/d/y')}}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</main>
+{% endblock %}

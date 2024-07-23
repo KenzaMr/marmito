@@ -6,6 +6,7 @@ use App\Entity\Recette;
 use App\Form\RecetteType;
 use App\Repository\RecetteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +33,7 @@ class RecetteController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'new')]
+    #[Route('/new', name: 'new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $obj = new Recette();
@@ -43,7 +44,7 @@ class RecetteController extends AbstractController
 
             $em->persist($recette);
             $em->flush();
-            $this->addFlash('sucess',"L'ingredient a été ajouter");
+            $this->addFlash('sucess', "L'ingredient a été ajouté");
 
             return $this->redirectToRoute('admin_recette_list');
         }
@@ -51,14 +52,27 @@ class RecetteController extends AbstractController
             'formulaire_recette' => $recette
         ]);
     }
-    #[Route('/edit/{id}', name: 'edit')]
-    public function edit(): Response
+    #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(Recette $recette, EntityManagerInterface $em, Request $request): Response
     {
-        return $this->render('admin/recette/edit.html.twig');
+        $form = $this->createForm(RecetteType::class, $recette);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            $this->addFlash('sucess', "L'ingredient a été modifié");
+
+            return $this->redirectToRoute('admin_recette_list');
+        }
+        return $this->render('admin/recette/edit.html.twig',[
+            'formulaire_recette'=>$form
+        ]);
     }
-    #[Route('/delete/{id}', name: 'delete')]
-    public function delete(): response
+    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
+    public function delete(Recette $recette, EntityManagerInterface $em): response
     {
-        return $this->render('admin/recette/delete.html.twig');
+        $em->remove($recette);
+        $em->flush();
+        return $this->redirectToRoute('admin_ingredient_index');
     }
 }

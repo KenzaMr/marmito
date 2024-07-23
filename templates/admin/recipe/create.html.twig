@@ -1,0 +1,12 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Creer ta recette
+{% endblock %}
+{% block body %}
+	<main>
+		<h1>Créer ta recette</h1>
+		{{form_start(formulaire_creation)}}
+		{{form_rest(formulaire_creation)}}
+		<input type="submit" value="Créer">
+		{{form_end(formulaire_creation)}}</main>
+{% endblock %}
