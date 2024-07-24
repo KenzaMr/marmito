@@ -19,6 +19,7 @@ class RecetteFixtures extends Fixture
             $recette->setPrice($faker->randomDigit());
             $recette->setDateOfCreation(new DateTimeImmutable());
             $manager->persist($recette);
+            $this->addReference('INGREDIENT'.$i,$recette);
         }
 
         $manager->flush();

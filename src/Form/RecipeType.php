@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -48,6 +49,10 @@ class RecipeType extends AbstractType
                 'choice_label'=>'name',
                 'multiple'=>true,
                 'expanded' => true,
+            ])
+            ->add('thumnailfile',FileType::class,[
+                'mapped'=>false,
+                'required'=>false
             ])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->autoSlug(...));
     }

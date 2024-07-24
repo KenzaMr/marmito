@@ -34,6 +34,15 @@ class RecipeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $object->setDateOfcreation(new DateTimeImmutable());
 
+            $file = $form->get('thumnailfile')->getData();
+
+            if ($file) {
+                $filedir = $this->getParameter('kernel.project_dir') . '/public/img/FileName';
+                $fileName = $object->getSlug() . '.' . $file->getClientOriginalExtension();
+                $file->move($filedir, $fileName);
+
+                $object->setFileName($fileName);
+            }
             $em->persist($object);
             $em->flush();
 
@@ -43,5 +52,27 @@ class RecipeController extends AbstractController
         return $this->render('admin/recipe/create.html.twig', [
             'formulaire_creation' => $form
         ]);
+    }
+    #[Route('/update/{id}', name: 'update',methods:['DELETE'])]
+    public function update(Recipe $recipe, EntityManagerInterface $em, Request $request): Response
+    {
+        $recette = $this->createForm(RecipeType::class, $recipe);
+        $recette->handleRequest($request);
+
+        if ($recette->isSubmitted() && $recette->isValid()) {
+            $em->flush();
+            $this->addFlash('sucess', 'Vous avez réussi à modifier la recette');
+
+            $this->redirectToRoute('admin_recipe_index');
+        }
+        return $this->render('admin/recipe/update.html.twig',[
+            'formulaire_modif'=>$recette
+        ]);
+    }
+    #[Route('/delete/{id}', name: 'delete')]
+    public function delete(Recipe $recipe, EntityManagerInterface $em):Response{
+        $em->remove($recipe);
+        $em->flush();
+        return $this->render('admin/recipe/delete.html.twig');
     }
 }

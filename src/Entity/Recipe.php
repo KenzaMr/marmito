@@ -68,14 +68,18 @@ class Recipe
         $this->dateOfcreation = new DateTimeImmutable();
     }
 
-    #[ORM\Column(nullable:true)]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $dateOfmaj = null;
 
     /**
      * @var Collection<int, Recette>
      */
     #[ORM\ManyToMany(targetEntity: Recette::class)]
+    #[ORM\JoinColumn(onDelete: "SET NULL")]
     private Collection $Ingredients;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $fileName = null;
 
     public function __construct()
     {
@@ -178,11 +182,11 @@ class Recipe
         return $this;
     }
 
-    
+
 
     /**
      * Get the value of nbPersonne
-     */ 
+     */
     public function getNbPersonne()
     {
         return $this->nbPersonne;
@@ -192,7 +196,7 @@ class Recipe
      * Set the value of nbPersonne
      *
      * @return  self
-     */ 
+     */
     public function setNbPersonne($nbPersonne)
     {
         $this->nbPersonne = $nbPersonne;
@@ -202,7 +206,7 @@ class Recipe
 
     /**
      * Get the value of dateOfcreation
-     */ 
+     */
     public function getDateOfcreation()
     {
         return $this->dateOfcreation;
@@ -212,7 +216,7 @@ class Recipe
      * Set the value of dateOfcreation
      *
      * @return  self
-     */ 
+     */
     public function setDateOfcreation($dateOfcreation)
     {
         $this->dateOfcreation = $dateOfcreation;
@@ -222,7 +226,7 @@ class Recipe
 
     /**
      * Get the value of dateOfmaj
-     */ 
+     */
     public function getDateOfmaj()
     {
         return $this->dateOfmaj;
@@ -232,7 +236,7 @@ class Recipe
      * Set the value of dateOfmaj
      *
      * @return  self
-     */ 
+     */
     public function setDateOfmaj($dateOfmaj)
     {
         $this->dateOfmaj = $dateOfmaj;
@@ -260,6 +264,26 @@ class Recipe
     public function removeIngredient(Recette $ingredient): static
     {
         $this->Ingredients->removeElement($ingredient);
+
+        return $this;
+    }
+
+    /**
+     * Get the value of fileName
+     */
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
+
+    /**
+     * Set the value of fileName
+     *
+     * @return  self
+     */
+    public function setFileName($fileName)
+    {
+        $this->fileName = $fileName;
 
         return $this;
     }
