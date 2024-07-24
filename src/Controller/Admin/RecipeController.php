@@ -13,7 +13,7 @@ use App\Entity\Recipe;
 use DateTimeImmutable;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-#[Route('/admin/recipe', name: 'admin_recipe')]
+#[Route('/admin/recipe', name: 'admin_recipe_')]
 class RecipeController extends AbstractController
 {
     #[Route('/', name: 'index')]
@@ -33,10 +33,6 @@ class RecipeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $object->setDateOfcreation(new DateTimeImmutable());
-
-            $slugger = new AsciiSlugger();
-            $slug = $slugger->slug($object->getName());
-            $object->setSlug(strtolower($slug));
 
             $em->persist($object);
             $em->flush();

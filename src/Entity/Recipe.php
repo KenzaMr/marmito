@@ -68,7 +68,7 @@ class Recipe
         $this->dateOfcreation = new DateTimeImmutable();
     }
 
-    #[ORM\Column]
+    #[ORM\Column(nullable:true)]
     private ?\DateTimeImmutable $dateOfmaj = null;
 
     /**
