@@ -11,9 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Recipe;
 use DateTimeImmutable;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[Route('/admin/recipe', name: 'admin_recipe_')]
+// #[IsGranted('ROLE_ADMIN')]
+// #[IsGranted('IS_AUTHENTIFICATED')]
 class RecipeController extends AbstractController
 {
     #[Route('/', name: 'index')]

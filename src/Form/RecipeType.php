@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Ingredients;
 use App\Entity\Recette;
 use App\Entity\Recipe;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -28,7 +29,7 @@ class RecipeType extends AbstractType
                 'label' => 'Slug',
                 'required' => false,
             ])
-            ->add('time')
+            ->add('temps')
             ->add('nbpersonne')
             ->add('difficulties', ChoiceType::class, [
                 'choices' => [
@@ -45,12 +46,13 @@ class RecipeType extends AbstractType
             ->add('prix')
             ->add('favoris')
             ->add('Ingredients',EntityType::class,[
-                'class'=>Recette::class,
+                'class'=>Ingredients::class,
                 'choice_label'=>'name',
                 'multiple'=>true,
                 'expanded' => true,
             ])
             ->add('thumnailfile',FileType::class,[
+                'label'=>'Image fichier',
                 'mapped'=>false,
                 'required'=>false
             ])

@@ -7,21 +7,16 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
-#[UniqueEntity('name')]
-#[HasLifecycleCallbacks]
 class Recipe
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
 
     #[Assert\NotBlank()]
     #[Assert\Length(min: 2, max: 50, minMessage: 'Rajoute des caractéres', maxMessage: 'Il y a trop de caractéres')]
@@ -35,8 +30,8 @@ class Recipe
 
     #[Assert\GreaterThanOrEqual(1)]
     #[Assert\LessThanOrEqual(1440)]
-    #[ORM\Column]
-    private ?int $time = null;
+    #[ORM\Column(nullable: true)]
+    private ?int $temps = null;
 
     #[Assert\LessThan(50)]
     #[ORM\Column]
@@ -59,39 +54,34 @@ class Recipe
     private ?bool $favoris = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $dateOfcreation = null;
-
+    private ?\DateTimeImmutable $dateOfCreation = null;
 
     #[ORM\PrePersist]
     public function setDateCreationValue()
     {
-        $this->dateOfcreation = new DateTimeImmutable();
+        $this->dateOfCreation = new DateTimeImmutable();
     }
-
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $dateOfmaj = null;
+    private ?\DateTimeImmutable $dateOfMaj = null;
 
     /**
-     * @var Collection<int, Recette>
+     * @var Collection<int, Ingredients>
      */
-    #[ORM\ManyToMany(targetEntity: Recette::class)]
-    #[ORM\JoinColumn(onDelete: "SET NULL")]
-    private Collection $Ingredients;
+    #[ORM\ManyToMany(targetEntity: Ingredients::class, inversedBy: 'recipes')]
+    private Collection $ingredients;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $fileName = null;
 
     public function __construct()
     {
-        $this->Ingredients = new ArrayCollection();
+        $this->ingredients = new ArrayCollection();
     }
-
     #[ORM\PreUpdate]
     public function setDateMajValue()
     {
-        $this->dateOfmaj = new DateTimeImmutable();
+        $this->dateOfMaj = new DateTimeImmutable();
     }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -121,18 +111,29 @@ class Recipe
         return $this;
     }
 
-    public function getTime(): ?int
+    public function getTemps(): ?int
     {
-        return $this->time;
+        return $this->temps;
     }
 
-    public function setTime(int $time): static
+    public function setTemps(?int $temps): static
     {
-        $this->time = $time;
+        $this->temps = $temps;
 
         return $this;
     }
 
+    public function getNbPersonne(): ?int
+    {
+        return $this->nbPersonne;
+    }
+
+    public function setNbPersonne(int $nbPersonne): static
+    {
+        $this->nbPersonne = $nbPersonne;
+
+        return $this;
+    }
 
     public function getDifficulties(): ?int
     {
@@ -182,106 +183,60 @@ class Recipe
         return $this;
     }
 
-
-
-    /**
-     * Get the value of nbPersonne
-     */
-    public function getNbPersonne()
+    public function getDateOfCreation(): ?\DateTimeImmutable
     {
-        return $this->nbPersonne;
+        return $this->dateOfCreation;
     }
 
-    /**
-     * Set the value of nbPersonne
-     *
-     * @return  self
-     */
-    public function setNbPersonne($nbPersonne)
+    public function setDateOfCreation(\DateTimeImmutable $dateOfCreation): static
     {
-        $this->nbPersonne = $nbPersonne;
+        $this->dateOfCreation = $dateOfCreation;
+
+        return $this;
+    }
+
+    public function getDateOfMaj(): ?\DateTimeImmutable
+    {
+        return $this->dateOfMaj;
+    }
+
+    public function setDateOfMaj(\DateTimeImmutable $dateOfMaj): static
+    {
+        $this->dateOfMaj = $dateOfMaj;
 
         return $this;
     }
 
     /**
-     * Get the value of dateOfcreation
-     */
-    public function getDateOfcreation()
-    {
-        return $this->dateOfcreation;
-    }
-
-    /**
-     * Set the value of dateOfcreation
-     *
-     * @return  self
-     */
-    public function setDateOfcreation($dateOfcreation)
-    {
-        $this->dateOfcreation = $dateOfcreation;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of dateOfmaj
-     */
-    public function getDateOfmaj()
-    {
-        return $this->dateOfmaj;
-    }
-
-    /**
-     * Set the value of dateOfmaj
-     *
-     * @return  self
-     */
-    public function setDateOfmaj($dateOfmaj)
-    {
-        $this->dateOfmaj = $dateOfmaj;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Recette>
+     * @return Collection<int, Ingredients>
      */
     public function getIngredients(): Collection
     {
-        return $this->Ingredients;
+        return $this->ingredients;
     }
 
-    public function addIngredient(Recette $ingredient): static
+    public function addIngredient(Ingredients $ingredient): static
     {
-        if (!$this->Ingredients->contains($ingredient)) {
-            $this->Ingredients->add($ingredient);
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients->add($ingredient);
         }
 
         return $this;
     }
 
-    public function removeIngredient(Recette $ingredient): static
+    public function removeIngredient(Ingredients $ingredient): static
     {
-        $this->Ingredients->removeElement($ingredient);
+        $this->ingredients->removeElement($ingredient);
 
         return $this;
     }
 
-    /**
-     * Get the value of fileName
-     */
-    public function getFileName()
+    public function getFileName(): ?string
     {
         return $this->fileName;
     }
 
-    /**
-     * Set the value of fileName
-     *
-     * @return  self
-     */
-    public function setFileName($fileName)
+    public function setFileName(?string $fileName): static
     {
         $this->fileName = $fileName;
 

@@ -23,7 +23,7 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
         $recette = new Recipe;
         $recette->setName($faker->foodName());
         $recette->setSlug('');
-        $recette->setTime(4);
+        $recette->setTemps(4);
         $recette->setNbPersonne(4);
         $recette->setDifficulties(3);
         $recette->setText('test');
@@ -44,6 +44,6 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
     }
     public function getDependencies()
     {
-        return [RecetteFixtures::class];
+        return [IngredientFixtures::class];
     }
 }

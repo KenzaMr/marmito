@@ -6,6 +6,7 @@
 {% block body %}
 	<main>
 		<h1>Recette</h1>
+		<a href={{path('admin_recipe_create')}} class='btn btn-light'>Ajouter une recette</a>
 		<table class='table tble-striped'>
 			<tr>
 				<th>Nom</th>
@@ -19,18 +20,23 @@
 			</tr>
 			{% for formulaire in formulaire_description %}
 				<tr>
-					<td><a href={{path('admin_recipe_show',{id:formulaire.id})}}>{{formulaire.name}}</a></td>
-					<td>{{formulaire.time}}</td>
+					<td>
+						<a href={{path('admin_recipe_show',{id:formulaire.id} )}}>{{formulaire.name}}</a>
+					</td>
+					<td>{{formulaire.temps}}</td>
 					<td>{{formulaire.difficulties}}</td>
 					<td>{{formulaire.text}}</td>
 					<td>{{formulaire.prix}}</td>
 					<td>
-						<a href={{path('admin_recipe_update',{'slug':formulaire.slug})}} class='btn btn-primary'>Modifier</a>
+						<a href={{path('admin_recipe_update',{'slug':formulaire.slug} )}} class='btn btn-primary'>Modifier</a>
 					</td>
-					<td><form action={{path('admin_recipe_delete',{'id':formulaire.id} )}}method='POST'></form>
+					<td>
+						<form action={{path('admin_recipe_delete',{'id':formulaire.id} )}} method='POST'>
 						<input type="hidden" name='_method' value='DELETE'>
 						<button type='submit' class='btn btn-danger'>Supprimer</button>
-						</td>
+						</form>
+						
+					</td>
 				</tr>
 			{% endfor %}
 		</table>
