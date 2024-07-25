@@ -9,29 +9,23 @@
 		<table class='table tble-striped'>
 			<tr>
 				<th>Nom</th>
-				<th>Slug</th>
 				<th>Temps</th>
-				<th>Nombre_de_personnes</th>
 				<th>Difficulté</th>
 				<th>Etape</th>
 				<th>Prix</th>
-				<th>Favoris</th>
 				<th>Modifier</th>
 				<th>Supprimer</th>
 
 			</tr>
 			{% for formulaire in formulaire_description %}
 				<tr>
-					<td>{{formulaire.name}}</td>
-					<td>{{formulaire.slug}}</td>
+					<td><a href={{path('admin_recipe_show',{id:formulaire.id})}}>{{formulaire.name}}</a></td>
 					<td>{{formulaire.time}}</td>
-					<td>{{formulaire.nbpersonne}}</td>
 					<td>{{formulaire.difficulties}}</td>
 					<td>{{formulaire.text}}</td>
 					<td>{{formulaire.prix}}</td>
-					<td>{{formulaire.favoris}}</td>
 					<td>
-						<a href={{path('admin_recipe_update',{'id':formulaire.id})}} class='btn btn-primary'>Modifier</a>
+						<a href={{path('admin_recipe_update',{'slug':formulaire.slug})}} class='btn btn-primary'>Modifier</a>
 					</td>
 					<td><form action={{path('admin_recipe_delete',{'id':formulaire.id} )}}method='POST'></form>
 						<input type="hidden" name='_method' value='DELETE'>

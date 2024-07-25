@@ -1,0 +1,20 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}Recette
+{% endblock %}
+{% block body %}
+<main><h1>Voici ta recette
+</h1>
+<h2>{{recette.name}}</h2>
+<h3>Les ingredients nécessaire</h3>
+{% for ingredient in recette.ingredients %}
+    <p>{{ingredient.name}}</p>
+{% endfor %}
+<h3>Les étapes:</h3>
+<p>{{recette.text}}</p>
+<h3>Nombre de personnes</h3>
+<p>{{recette.nbpersonne}}</p>
+<h3>Le temps en min</h3>
+<p>{{recette.time}}</p>
+
+</main>
+{% endblock %}

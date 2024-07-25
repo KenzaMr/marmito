@@ -19,9 +19,9 @@ class RecipeController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(RecipeRepository $repository): Response
     {
-        $form = $repository->findAll();
+        $recipes = $repository->findAll();
         return $this->render('admin/recipe/index.html.twig', [
-            'formulaire_description' => $form
+            'formulaire_description' => $recipes
         ]);
     }
     #[Route('/create', name: 'create')]
@@ -53,7 +53,7 @@ class RecipeController extends AbstractController
             'formulaire_creation' => $form
         ]);
     }
-    #[Route('/update/{id}', name: 'update',methods:['DELETE'])]
+    #[Route('/update/{slug}', name: 'update', methods: ['GET', 'POST'])]
     public function update(Recipe $recipe, EntityManagerInterface $em, Request $request): Response
     {
         $recette = $this->createForm(RecipeType::class, $recipe);
@@ -65,14 +65,25 @@ class RecipeController extends AbstractController
 
             $this->redirectToRoute('admin_recipe_index');
         }
-        return $this->render('admin/recipe/update.html.twig',[
-            'formulaire_modif'=>$recette
+        return $this->render('admin/recipe/update.html.twig', [
+            'formulaire_modif' => $recette
         ]);
     }
-    #[Route('/delete/{id}', name: 'delete')]
-    public function delete(Recipe $recipe, EntityManagerInterface $em):Response{
+    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
+    public function delete(Recipe $recipe, EntityManagerInterface $em): Response
+    {
         $em->remove($recipe);
         $em->flush();
-        return $this->render('admin/recipe/delete.html.twig');
+        $this->addFlash('sucess', 'Vous avez réussi à supprimer la recette');
+
+        return $this->redirectToRoute('admin_recipe_index');
+    }
+    #[Route('/show/{id}', name: 'show')]
+    public function show(Recipe $recipe, RecipeRepository $repository)
+    {
+
+        return $this->render('admin/recipe/show.html.twig', [
+            'recette'=>$recipe
+        ]);
     }
 }
