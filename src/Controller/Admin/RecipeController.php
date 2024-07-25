@@ -15,7 +15,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[Route('/admin/recipe', name: 'admin_recipe_')]
-// #[IsGranted('ROLE_ADMIN')]
+
+#[IsGranted('ROLE_USER')]
 // #[IsGranted('IS_AUTHENTIFICATED')]
 class RecipeController extends AbstractController
 {
